@@ -20,8 +20,8 @@ def split_data(df_chart):
     np_return = np_chart[:, 0:5:4]
     return np_return
 
-def create_mean(df_chart, mean=[5, 20]):
-    close_chart = np.array(list(df_chart['ClosePrice']))
+def create_mean(np_chart, mean=[5, 20]):
+    close_chart = np_chart[:, 1]
     max_length = close_chart.shape[0] - max(mean)
     np_return = np.empty([max_length, len(mean)])
 
@@ -45,7 +45,8 @@ def plt_show(df_chart):
 def main():
     df_order = get_data()
     np_split = split_data(df_order)
-    np_mean = create_mean(df_order)
+    np_mean = create_mean(np_split)
+    print(np_mean)
 
 if __name__ == '__main__':
     main()
