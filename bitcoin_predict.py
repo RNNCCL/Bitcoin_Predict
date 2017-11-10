@@ -3,6 +3,7 @@
 import requests
 import pandas as pd
 import matplotlib.pyplot as plt
+import numpy as np
 
 def get_data(time=300):
     URL = 'https://api.cryptowat.ch/markets/bitflyer/btcjpy/ohlc?periods='
@@ -11,20 +12,32 @@ def get_data(time=300):
     df_order.columns = ['CloseTime', 'OpenPrice', 'HighPrice', 'LowPrice', 'ClosePrice', 'Volume']
     return df_order
 
-def mean_np(df_data, mean=[5, 20]):
-    np_data = df_data.as_matrix()
-    for i in mean:
-        data_x = np.
+def create_mean(df_chart, mean=[5, 20]):
+    close_chart = np.array(list(df_chart['ClosePrice']))
+    max_length = close_chart.shape[0] - max(mean)
+    np_return = np.empty([max_length, len(mean)])
 
-def plt_show(df_data):
-    xlist = df_data['CloseTime']
-    ylist = df_data['ClosePrice']
+    # 平均線の個数だけ繰り返し
+    for i, period in enumerate(mean):
+        for idx in range(max_length):
+            mean_chart = 0
+            for j in range(period):
+                mean_chart += close_chart[period + idx - j - 1]
+            mean_chart /= period
+            devarge_chart = close_chart[period + idx - 1] / mean_chart
+            np_return[idx, i] = devarge_chart * 100
+    return np_return
+
+def plt_show(df_chart):
+    xlist = df_chart['CloseTime']
+    ylist = df_chart['ClosePrice']
     plt.plot(xlist, ylist)
     plt.show()
 
 def main():
     df_order = get_data()
-    np_order = mean_np(df_order)
+    np_mean = create_mean(df_order)
+    print(np_mean)
 
 if __name__ == '__main__':
     main()
