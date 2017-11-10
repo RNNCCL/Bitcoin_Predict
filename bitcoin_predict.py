@@ -12,6 +12,14 @@ def get_data(time=300):
     df_order.columns = ['CloseTime', 'OpenPrice', 'HighPrice', 'LowPrice', 'ClosePrice', 'Volume']
     return df_order
 
+def split_data(df_chart):
+    '''
+        CloseTimeとClosePriceのみのndarrayを返す
+    '''
+    np_chart = df_chart.as_matrix()
+    np_return = np_chart[:, 0:5:4]
+    return np_return
+
 def create_mean(df_chart, mean=[5, 20]):
     close_chart = np.array(list(df_chart['ClosePrice']))
     max_length = close_chart.shape[0] - max(mean)
@@ -36,8 +44,8 @@ def plt_show(df_chart):
 
 def main():
     df_order = get_data()
+    np_split = split_data(df_order)
     np_mean = create_mean(df_order)
-    print(np_mean)
 
 if __name__ == '__main__':
     main()
