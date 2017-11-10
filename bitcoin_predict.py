@@ -9,11 +9,12 @@ def get_data(time=300):
     response = requests.get(URL, time).json()
     df_order = pd.DataFrame(response['result'][str(time)])
     df_order.columns = ['CloseTime', 'OpenPrice', 'HighPrice', 'LowPrice', 'ClosePrice', 'Volume']
-    print(df_order.head(20))
     return df_order
 
-def df_to_np(df_data):
-    pass
+def mean_np(df_data, mean=[5, 20]):
+    np_data = df_data.as_matrix()
+    for i in mean:
+        data_x = np.
 
 def plt_show(df_data):
     xlist = df_data['CloseTime']
@@ -23,8 +24,7 @@ def plt_show(df_data):
 
 def main():
     df_order = get_data()
-    np_order = df_to_np(df_order)
-    plt_show(df_order)
+    np_order = mean_np(df_order)
 
 if __name__ == '__main__':
     main()
