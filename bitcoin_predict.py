@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 '''cryptowatchAPIにて、取得したデータをディープラーニング()'''
 import requests
+import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import numpy as np
 
 def get_data(time=300):
     URL = 'https://api.cryptowat.ch/markets/bitflyer/btcjpy/ohlc?periods='
@@ -36,6 +36,20 @@ def create_mean(np_chart, mean=[5, 20]):
             np_return[idx, i] = devarge_chart * 100
     return np_return
 
+def create_y(np_split, p=0.1):
+    np_y = np.empty((0, 1), float)
+    np_return = np.empty((0, 1), int)
+    for i in range(1, np_split.shape[0]):
+        np_y = np.append(np_y, np_split[i, 1] / np_split[i - 1, 1] * 100)
+    for yi in np_y:
+        if yi > 100 + p:
+            np_return = np.append(np_return, 1)
+        elif yi < 100 - p:
+            np_return = np.append(np_return, -1)
+        else:
+            np_return = np.append(np_return, 0)
+    return np_return
+
 def plt_show(df_chart):
     xlist = df_chart['CloseTime']
     ylist = df_chart['ClosePrice']
@@ -43,10 +57,17 @@ def plt_show(df_chart):
     plt.show()
 
 def main():
-    df_order = get_data()
+    # 変数
+    MEAN = [5, 20]
+    P = 0.1
+    TIME = 300
+
+    # データの整理
+    df_order = get_data(time=TIME)
     np_split = split_data(df_order)
-    np_mean = create_mean(np_split)
-    print(np_mean)
+    np_mean = create_mean(np_split, mean=MEAN)
+    np_y = create_y(np_split, p=P)
+    np_y = np_y[max(MEAN)-1:]
 
 if __name__ == '__main__':
     main()
