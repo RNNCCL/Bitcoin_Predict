@@ -5,6 +5,10 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+from sklearn.metrics import accuracy_score
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+
 def get_data(time=300):
     URL = 'https://api.cryptowat.ch/markets/bitflyer/btcjpy/ohlc?periods='
     response = requests.get(URL, time).json()
@@ -59,7 +63,7 @@ def plt_show(df_chart):
 def main():
     # 変数
     MEAN = [5, 20]
-    P = 0.1
+    P = 0
     TIME = 300
 
     # データの整理
@@ -68,6 +72,13 @@ def main():
     np_mean = create_mean(np_split, mean=MEAN)
     np_y = create_y(np_split, p=P)
     np_y = np_y[max(MEAN)-1:]
+
+    # 機械学習するやーつやで
+    X_train, X_test, y_train, y_test = train_test_split(np_mean, np_y, test_size=0.3)
+    forest = RandomForestClassifier(criterion='entropy', n_estimators=100)
+    forest.fit(X_train, y_train)
+    y_predict = forest.predict(X_test)
+    print("正答率: ", accuracy_score(y_test, y_predict))
 
 if __name__ == '__main__':
     main()
