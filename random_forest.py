@@ -54,12 +54,6 @@ def create_y(np_split, p=0.1):
             np_return = np.append(np_return, 0)
     return np_return
 
-def plt_show(df_chart):
-    xlist = df_chart['CloseTime']
-    ylist = df_chart['ClosePrice']
-    plt.plot(xlist, ylist)
-    plt.show()
-
 def main():
     # 変数
     MEAN = [5, 10]
@@ -75,13 +69,19 @@ def main():
 
     # 機械学習するやーつ
     X_train, X_test, y_train, y_test = train_test_split(np_mean, np_y, test_size=0.3)
-    forest = RandomForestClassifier(criterion='entropy', n_estimators=100)
+    forest = RandomForestClassifier(criterion='entropy', n_estimators=10)
     forest.fit(X_train, y_train)
     y_predict = forest.predict(X_test)
     print("正答率: ", accuracy_score(y_test, y_predict))
 
     # 描画
-    plt_show(df_order)
+    colors = ['r', 'b']
+    for l, c in zip(np.unique(y_train), colors):
+        plt.scatter(X_train[y_train==l, 0], 
+                    X_train[y_train==l, 1], 
+                    c=c, 
+                    marker='o')
+    plt.show()
 
 if __name__ == '__main__':
     main()
