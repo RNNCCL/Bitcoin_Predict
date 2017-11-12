@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''cryptowatchAPIにて、取得したデータをディープラーニング()'''
+'''cryptowatchAPIにて、取得したデータをRandomForest'''
 import requests
 import numpy as np
 import pandas as pd
