@@ -62,7 +62,7 @@ def plt_show(df_chart):
 
 def main():
     # 変数
-    MEAN = [5, 20]
+    MEAN = [5, 10]
     P = 0
     TIME = 300
 
@@ -73,12 +73,15 @@ def main():
     np_y = create_y(np_split, p=P)
     np_y = np_y[max(MEAN)-1:]
 
-    # 機械学習するやーつやで
+    # 機械学習するやーつ
     X_train, X_test, y_train, y_test = train_test_split(np_mean, np_y, test_size=0.3)
     forest = RandomForestClassifier(criterion='entropy', n_estimators=100)
     forest.fit(X_train, y_train)
     y_predict = forest.predict(X_test)
     print("正答率: ", accuracy_score(y_test, y_predict))
+
+    # 描画
+    plt_show(df_order)
 
 if __name__ == '__main__':
     main()
