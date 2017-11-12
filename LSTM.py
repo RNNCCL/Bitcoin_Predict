@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 '''cryptowatchAPIにて、取得したデータをディープラーニング（）'''
+import requests
+import pandas as pd
 
 def get_data(time=300):
     URL = 'https://api.cryptowat.ch/markets/bitflyer/btcjpy/ohlc?periods='
